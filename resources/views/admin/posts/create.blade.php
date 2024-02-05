@@ -20,6 +20,13 @@
                             @include('admin.posts._form')
 
                             <div class="form-group">
+                                {{ Form::label('user_id', 'Author', ['class' => 'col-md-2 control-label']) }}
+                                <div class="col-md-8">
+                                    {{ Form::select('user_id', $authors, null, ['class' => 'form-control']) }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <div class="col-md-8 col-md-offset-2">
                                     <button type="submit" class="btn btn-primary">
                                         Create

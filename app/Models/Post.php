@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Notifications\PostCreatedNotification;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -25,6 +26,10 @@ class Post extends Model
             function ($post) {
                 if (is_null($post->user_id)) {
                     $post->user_id = auth()->user()->id;
+                    $admin = User::where('is_admin', true)->first();
+                    if($admin) { 
+                        $admin->notify(new PostCreatedNotification($post)); 
+                    }
                 }
             }
         );

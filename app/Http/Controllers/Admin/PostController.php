@@ -23,8 +23,9 @@ class PostController extends Controller
     {
         $categories = Category::pluck('name', 'id')->all();
         $tags = Tag::pluck('name', 'name')->all();
+        $authors = User::pluck('name', 'id')->all();
 
-        return view('admin.posts.create', compact('categories', 'tags'));
+        return view('admin.posts.create', compact('categories', 'tags', 'authors'));
     }
 
     public function store(PostRequest $request)
@@ -34,6 +35,7 @@ class PostController extends Controller
                 'title'       => $request->title,
                 'body'        => $request->body,
                 'category_id' => $request->category_id,
+                'user_id'     => $request->user_id,
             ]
         );
 
@@ -46,8 +48,10 @@ class PostController extends Controller
         $post->tags()->attach($tagsId);
         flash()->overlay('Post created successfully.');
 
-        $admin = User::where('is_admin', true);
-        if($admin) { $admin->notify(new PostCreatedNotification($post)); }
+        $admin = User::where('is_admin', true)->first();
+        if($admin) { 
+            $admin->notify(new PostCreatedNotification($post)); 
+        }
 
         return redirect('/admin/posts');
     }
