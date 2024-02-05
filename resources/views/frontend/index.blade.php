@@ -14,7 +14,7 @@
                             {{ $post->title }} - <small>by {{ $post->user->name }}</small>
 
                             <span class="pull-right">
-                                {{ $post->created_at->toDayDateTimeString() }}
+                                {{ $post->created_at ? $post->created_at->toDayDateTimeString() : '2024-01-01 00:00:00' }}
                             </span>
                         </div>
 

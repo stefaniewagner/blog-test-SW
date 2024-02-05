@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Notifications\PostCreatedNotification;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\User;
 
 class PostController extends Controller
 {
@@ -43,6 +45,9 @@ class PostController extends Controller
 
         $post->tags()->attach($tagsId);
         flash()->overlay('Post created successfully.');
+
+        $admin = User::where('is_admin', true);
+        if($admin) { $admin->notify(new PostCreatedNotification($post)); }
 
         return redirect('/admin/posts');
     }
